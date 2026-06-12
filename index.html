@@ -1,0 +1,487 @@
+import React, { useState, useMemo } from 'react';
+import { Search, Clock, User, Calendar, MapPin, School, AlertCircle, Shield, ShieldCheck, X } from 'lucide-react';
+
+// Data Siswa SMP Malika Boarding School
+const studentData = [
+  // === VII A PUTRA ===
+  { id: '7A-PA-1', name: 'Athariz Chalief Saputra', className: 'VII A PUTRA', time: '08.00 - 09.00 WIB' },
+  { id: '7A-PA-2', name: 'Ahmad Khomaini', className: 'VII A PUTRA', time: '08.00 - 09.00 WIB' },
+  { id: '7A-PA-3', name: 'Al Athar Ghaizan Nobel', className: 'VII A PUTRA', time: '08.00 - 09.00 WIB', isHold: true },
+  { id: '7A-PA-4', name: 'Alzabar Akbar', className: 'VII A PUTRA', time: '08.00 - 09.00 WIB' },
+  { id: '7A-PA-5', name: 'Arya Devano', className: 'VII A PUTRA', time: '08.00 - 09.00 WIB' },
+  { id: '7A-PA-6', name: 'Abyan Dzaky Hafizh Kurniawan', className: 'VII A PUTRA', time: '08.00 - 09.00 WIB' },
+  { id: '7A-PA-7', name: 'Fadil Syafif Nugroho Sukri', className: 'VII A PUTRA', time: '08.00 - 09.00 WIB' },
+  { id: '7A-PA-8', name: 'Fakhri Muhammad Mumtaz', className: 'VII A PUTRA', time: '08.00 - 09.00 WIB' },
+  { id: '7A-PA-9', name: 'I Komang Raditiya Novian Pradana Putra', className: 'VII A PUTRA', time: '08.00 - 09.00 WIB', isHold: true },
+  { id: '7A-PA-10', name: 'Ibad Najwan', className: 'VII A PUTRA', time: '08.00 - 09.00 WIB' },
+  { id: '7A-PA-11', name: 'Ibni Shidqie Al Mumtazhar', className: 'VII A PUTRA', time: '08.00 - 09.00 WIB' },
+  { id: '7A-PA-12', name: 'Kenzie Dastan Shalahuddin Zan', className: 'VII A PUTRA', time: '08.00 - 09.00 WIB' },
+  { id: '7A-PA-13', name: 'Khaerul A\'Zam Ismail', className: 'VII A PUTRA', time: '09.00 - 10.00 WIB' },
+  { id: '7A-PA-14', name: 'Khairiy Rezki Adhinata', className: 'VII A PUTRA', time: '09.00 - 10.00 WIB' },
+  { id: '7A-PA-15', name: 'Lionel Pratama Nugroho', className: 'VII A PUTRA', time: '09.00 - 10.00 WIB' },
+  { id: '7A-PA-16', name: 'Mahfidz Ardiansyah', className: 'VII A PUTRA', time: '09.00 - 10.00 WIB' },
+  { id: '7A-PA-17', name: 'Mohamad Akromul Azam', className: 'VII A PUTRA', time: '09.00 - 10.00 WIB' },
+  { id: '7A-PA-18', name: 'Mohammad Ezra Rafiandhika', className: 'VII A PUTRA', time: '09.00 - 10.00 WIB' },
+  { id: '7A-PA-19', name: 'Muhammad Akhtar Al Hisyam', className: 'VII A PUTRA', time: '09.00 - 10.00 WIB' },
+  { id: '7A-PA-20', name: 'Muhammad Al Fatih', className: 'VII A PUTRA', time: '09.00 - 10.00 WIB' },
+  { id: '7A-PA-21', name: 'Muhammad Fatir Albahri', className: 'VII A PUTRA', time: '10.00 - 11.00 WIB' },
+  { id: '7A-PA-22', name: 'Muhammad Naufal Rizki', className: 'VII A PUTRA', time: '10.00 - 11.00 WIB' },
+  { id: '7A-PA-23', name: 'Muhammad Syamil At Tsauri', className: 'VII A PUTRA', time: '10.00 - 11.00 WIB' },
+  { id: '7A-PA-24', name: 'Nauval Abdul Rasyid', className: 'VII A PUTRA', time: '10.00 - 11.00 WIB' },
+  { id: '7A-PA-25', name: 'Pranatantra Fachrie', className: 'VII A PUTRA', time: '10.00 - 11.00 WIB' },
+  { id: '7A-PA-26', name: 'Rajata Ibnu Faqih', className: 'VII A PUTRA', time: '10.00 - 11.00 WIB' },
+  { id: '7A-PA-27', name: 'Reygi Antajun Hikaru', className: 'VII A PUTRA', time: '10.00 - 11.00 WIB' },
+  { id: '7A-PA-28', name: 'Rifqi Irfan Hamizan', className: 'VII A PUTRA', time: '10.00 - 11.00 WIB' },
+  { id: '7A-PA-29', name: 'Umar Al Jailaani', className: 'VII A PUTRA', time: '11.00 - 12.20 WIB' },
+  { id: '7A-PA-30', name: 'Yossa Dzulfi Andrean', className: 'VII A PUTRA', time: '11.00 - 12.20 WIB' },
+  { id: '7A-PA-31', name: 'Zahran Sahil', className: 'VII A PUTRA', time: '11.00 - 12.20 WIB' },
+  { id: '7A-PA-32', name: 'Rizky Setyo Nugroho', className: 'VII A PUTRA', time: '11.00 - 12.20 WIB' },
+  { id: '7A-PA-33', name: 'Teuku Rizqi Mutha', className: 'VII A PUTRA', time: '11.00 - 12.20 WIB' },
+  { id: '7A-PA-34', name: 'Muhammad Haikal Hidayatullah', className: 'VII A PUTRA', time: '11.00 - 12.20 WIB' },
+
+  // === VII B PUTRA ===
+  { id: '7B-PA-1', name: 'Abidzar Nuha Wafi', className: 'VII B PUTRA', time: '08.00 - 09.00 WIB' },
+  { id: '7B-PA-2', name: 'Ach. Raihan Faiz As-Sudaisyi', className: 'VII B PUTRA', time: '08.00 - 09.00 WIB' },
+  { id: '7B-PA-3', name: 'Ahmad Nazmu Durori', className: 'VII B PUTRA', time: '08.00 - 09.00 WIB' },
+  { id: '7B-PA-4', name: 'Akbar Nurfatah Arsadi', className: 'VII B PUTRA', time: '08.00 - 09.00 WIB' },
+  { id: '7B-PA-5', name: 'Akhdan Athaya Putra Zulfikar', className: 'VII B PUTRA', time: '08.00 - 09.00 WIB' },
+  { id: '7B-PA-6', name: 'Al Barra Ananta Putra', className: 'VII B PUTRA', time: '08.00 - 09.00 WIB' },
+  { id: '7B-PA-7', name: 'Annabighoh Syabanu Gunawan', className: 'VII B PUTRA', time: '08.00 - 09.00 WIB', isHold: true },
+  { id: '7B-PA-8', name: 'Arrais Mahardika Rusli', className: 'VII B PUTRA', time: '08.00 - 09.00 WIB' },
+  { id: '7B-PA-9', name: 'Athaya Kaysan Hakim', className: 'VII B PUTRA', time: '08.00 - 09.00 WIB' },
+  { id: '7B-PA-10', name: 'Aufa Gilang Pratama', className: 'VII B PUTRA', time: '08.00 - 09.00 WIB' },
+  { id: '7B-PA-11', name: 'Bilal Abdul Aslam', className: 'VII B PUTRA', time: '08.00 - 09.00 WIB' },
+  { id: '7B-PA-12', name: 'Brilliant Alziddan Mustofa', className: 'VII B PUTRA', time: '08.00 - 09.00 WIB' },
+  { id: '7B-PA-13', name: 'Denny Maulana Yusuf', className: 'VII B PUTRA', time: '09.00 - 10.00 WIB' },
+  { id: '7B-PA-14', name: 'Fathir Muhammad Fadhilah', className: 'VII B PUTRA', time: '09.00 - 10.00 WIB' },
+  { id: '7B-PA-15', name: 'Haikal Ahfwan', className: 'VII B PUTRA', time: '09.00 - 10.00 WIB' },
+  { id: '7B-PA-16', name: 'Harry Harsya Shiddiq', className: 'VII B PUTRA', time: '09.00 - 10.00 WIB' },
+  { id: '7B-PA-17', name: 'Ifan Sofyan', className: 'VII B PUTRA', time: '09.00 - 10.00 WIB' },
+  { id: '7B-PA-18', name: 'Kenzie Adelio Tristan', className: 'VII B PUTRA', time: '09.00 - 10.00 WIB' },
+  { id: '7B-PA-19', name: 'Khairul Walif', className: 'VII B PUTRA', time: '09.00 - 10.00 WIB' },
+  { id: '7B-PA-20', name: 'Luthfirrahman Nafis Hananto', className: 'VII B PUTRA', time: '09.00 - 10.00 WIB' },
+  { id: '7B-PA-21', name: 'Muhammad Al-Gaza Putra Dewian', className: 'VII B PUTRA', time: '10.00 - 11.00 WIB' },
+  { id: '7B-PA-22', name: 'Muhammad Arafa Ekiyano Febrian', className: 'VII B PUTRA', time: '10.00 - 11.00 WIB' },
+  { id: '7B-PA-23', name: 'Muhammad Dilfa Fattan', className: 'VII B PUTRA', time: '10.00 - 11.00 WIB' },
+  { id: '7B-PA-24', name: 'Muhammad Fahriansyah', className: 'VII B PUTRA', time: '10.00 - 11.00 WIB', isHold: true },
+  { id: '7B-PA-25', name: 'Muhammad Fathan Toriq', className: 'VII B PUTRA', time: '10.00 - 11.00 WIB' },
+  { id: '7B-PA-26', name: 'Muhammad Haikal Al Faisya', className: 'VII B PUTRA', time: '10.00 - 11.00 WIB' },
+  { id: '7B-PA-27', name: 'Muhammad Najetullah', className: 'VII B PUTRA', time: '10.00 - 11.00 WIB' },
+  { id: '7B-PA-28', name: 'Muhammad Raditya Fauzan', className: 'VII B PUTRA', time: '10.00 - 11.00 WIB' },
+  { id: '7B-PA-29', name: 'Muhammad Waldan', className: 'VII B PUTRA', time: '10.00 - 11.00 WIB' },
+  { id: '7B-PA-30', name: 'Rayhan Faiz Abdillah Hadiyanto', className: 'VII B PUTRA', time: '11.00 - 12.20 WIB' },
+  { id: '7B-PA-31', name: 'Sultan Fatih Setiawan', className: 'VII B PUTRA', time: '11.00 - 12.20 WIB' },
+  { id: '7B-PA-32', name: 'Zhafran Tata Hidayat', className: 'VII B PUTRA', time: '11.00 - 12.20 WIB' },
+  { id: '7B-PA-33', name: 'Muhammad Ali Shahib Aidid', className: 'VII B PUTRA', time: '11.00 - 12.20 WIB' },
+  { id: '7B-PA-34', name: 'Fathin Aufa Arzaqi', className: 'VII B PUTRA', time: '11.00 - 12.20 WIB' },
+
+  // === VII A PUTRI ===
+  { id: '7A-PI-1', name: 'Adara Riyanti', className: 'VII A PUTRI', time: '08.00 - 09.00 WIB' },
+  { id: '7A-PI-2', name: 'Aghniya Musamma Harahap', className: 'VII A PUTRI', time: '08.00 - 09.00 WIB' },
+  { id: '7A-PI-3', name: 'Ahla Amny Maulidya', className: 'VII A PUTRI', time: '08.00 - 09.00 WIB' },
+  { id: '7A-PI-4', name: 'Alivia Zahratukanza', className: 'VII A PUTRI', time: '08.00 - 09.00 WIB' },
+  { id: '7A-PI-5', name: 'Ameera Syahida Ajie', className: 'VII A PUTRI', time: '08.00 - 09.00 WIB' },
+  { id: '7A-PI-6', name: 'Asyifa Mahira Lubis', className: 'VII A PUTRI', time: '08.00 - 09.00 WIB' },
+  { id: '7A-PI-7', name: 'Bilqis Ghaisani Ahza', className: 'VII A PUTRI', time: '08.00 - 09.00 WIB' },
+  { id: '7A-PI-8', name: 'Callysta Lareina Nabiha', className: 'VII A PUTRI', time: '08.00 - 09.00 WIB' },
+  { id: '7A-PI-9', name: 'Cordelia Krisna Widyantary', className: 'VII A PUTRI', time: '08.00 - 09.00 WIB' },
+  { id: '7A-PI-10', name: 'Deyanna Abigail Baligha Zephania', className: 'VII A PUTRI', time: '08.00 - 09.00 WIB', isHold: true },
+  { id: '7A-PI-11', name: 'Filzah Ghaisani Fikriyah', className: 'VII A PUTRI', time: '08.00 - 09.00 WIB' },
+  { id: '7A-PI-12', name: 'Indhieswara Maharani', className: 'VII A PUTRI', time: '08.00 - 09.00 WIB', isHold: true },
+  { id: '7A-PI-13', name: 'Kanaya Athallah Dzakiyyah', className: 'VII A PUTRI', time: '09.00 - 10.00 WIB' },
+  { id: '7A-PI-14', name: 'Kawa\'iba Puti Firmansyah', className: 'VII A PUTRI', time: '09.00 - 10.00 WIB' },
+  { id: '7A-PI-15', name: 'Keisha Sahila Az Zahra', className: 'VII A PUTRI', time: '09.00 - 10.00 WIB' },
+  { id: '7A-PI-16', name: 'Yukqiu Natasha Ardi', className: 'VII A PUTRI', time: '09.00 - 10.00 WIB' },
+  { id: '7A-PI-17', name: 'Khansa Ghina Rachmani', className: 'VII A PUTRI', time: '09.00 - 10.00 WIB' },
+  { id: '7A-PI-18', name: 'Mehira Mehrnaz Multazam', className: 'VII A PUTRI', time: '09.00 - 10.00 WIB' },
+  { id: '7A-PI-19', name: 'Nadiya Fajria Salsabila', className: 'VII A PUTRI', time: '09.00 - 10.00 WIB' },
+  { id: '7A-PI-20', name: 'Novilly Azwan', className: 'VII A PUTRI', time: '09.00 - 10.00 WIB' },
+  { id: '7A-PI-21', name: 'Putri Mutia Rahmi', className: 'VII A PUTRI', time: '10.00 - 11.00 WIB' },
+  { id: '7A-PI-22', name: 'Queenisa Yumna Zahirah', className: 'VII A PUTRI', time: '10.00 - 11.00 WIB' },
+  { id: '7A-PI-23', name: 'Rita Madinatul Arofah', className: 'VII A PUTRI', time: '10.00 - 11.00 WIB' },
+  { id: '7A-PI-24', name: 'Saffanah Saafia Zahirah', className: 'VII A PUTRI', time: '10.00 - 11.00 WIB' },
+  { id: '7A-PI-25', name: 'Shelby Sinar Islamadina', className: 'VII A PUTRI', time: '10.00 - 11.00 WIB' },
+  { id: '7A-PI-26', name: 'Shira Rizkia Adara', className: 'VII A PUTRI', time: '10.00 - 11.00 WIB' },
+  { id: '7A-PI-27', name: 'Siti Shofa Aulia Rahman', className: 'VII A PUTRI', time: '10.00 - 11.00 WIB', isHold: true },
+  { id: '7A-PI-28', name: 'Syifa Anindya', className: 'VII A PUTRI', time: '10.00 - 11.00 WIB' },
+  { id: '7A-PI-29', name: 'Talita Himayatul Kamilah', className: 'VII A PUTRI', time: '10.00 - 11.00 WIB' },
+  { id: '7A-PI-30', name: 'Talita Khansa Saputra', className: 'VII A PUTRI', time: '11.00 - 12.20 WIB', isHold: true },
+  { id: '7A-PI-31', name: 'Zivana Lay', className: 'VII A PUTRI', time: '11.00 - 12.20 WIB' },
+  { id: '7A-PI-32', name: 'Fathya Caliana', className: 'VII A PUTRI', time: '11.00 - 12.20 WIB' },
+  { id: '7A-PI-33', name: 'Tsamarah Arissa Qaireen', className: 'VII A PUTRI', time: '11.00 - 12.20 WIB' },
+
+  // === VII B PUTRI ===
+  { id: '7B-PI-1', name: 'Aira Fitriani Azzahra', className: 'VII B PUTRI', time: '08.00 - 09.00 WIB' },
+  { id: '7B-PI-2', name: 'Aisyah Fahira Husna', className: 'VII B PUTRI', time: '08.00 - 09.00 WIB' },
+  { id: '7B-PI-3', name: 'Alya Zahra Nabila', className: 'VII B PUTRI', time: '08.00 - 09.00 WIB' },
+  { id: '7B-PI-4', name: 'Ameera Isnain Setiadi', className: 'VII B PUTRI', time: '08.00 - 09.00 WIB' },
+  { id: '7B-PI-5', name: 'Aulia Zahra Ibrahim', className: 'VII B PUTRI', time: '08.00 - 09.00 WIB' },
+  { id: '7B-PI-6', name: 'Azizahtun Nazwa', className: 'VII B PUTRI', time: '08.00 - 09.00 WIB' },
+  { id: '7B-PI-7', name: 'Ghina Bilqis Shabreen', className: 'VII B PUTRI', time: '08.00 - 09.00 WIB' },
+  { id: '7B-PI-8', name: 'Hafizhah Alimah', className: 'VII B PUTRI', time: '08.00 - 09.00 WIB' },
+  { id: '7B-PI-9', name: 'Haninda Aulia Dayana', className: 'VII B PUTRI', time: '08.00 - 09.00 WIB' },
+  { id: '7B-PI-10', name: 'Hilma Arifa Aulia Rosid', className: 'VII B PUTRI', time: '08.00 - 09.00 WIB', isHold: true },
+  { id: '7B-PI-11', name: 'Jihan Amira Karim', className: 'VII B PUTRI', time: '08.00 - 09.00 WIB' },
+  { id: '7B-PI-12', name: 'Keyla Khanza Ramadhani', className: 'VII B PUTRI', time: '08.00 - 09.00 WIB', isHold: true },
+  { id: '7B-PI-13', name: 'Kinara Rahmadania', className: 'VII B PUTRI', time: '09.00 - 10.00 WIB' },
+  { id: '7B-PI-14', name: 'Nafisa Al Mahira', className: 'VII B PUTRI', time: '09.00 - 10.00 WIB' },
+  { id: '7B-PI-15', name: 'Nailatisya Aquina Salsabilla', className: 'VII B PUTRI', time: '09.00 - 10.00 WIB' },
+  { id: '7B-PI-16', name: 'Nilam Maulina Anggraini', className: 'VII B PUTRI', time: '09.00 - 10.00 WIB' },
+  { id: '7B-PI-17', name: 'R A Najeela Putri Widiarsa', className: 'VII B PUTRI', time: '09.00 - 10.00 WIB' },
+  { id: '7B-PI-18', name: 'Rhaqueena Aleameccha Alingga', className: 'VII B PUTRI', time: '09.00 - 10.00 WIB' },
+  { id: '7B-PI-19', name: 'Salsabila Zovanka', className: 'VII B PUTRI', time: '09.00 - 10.00 WIB' },
+  { id: '7B-PI-20', name: 'Shakila Aulia Sakhiy', className: 'VII B PUTRI', time: '09.00 - 10.00 WIB' },
+  { id: '7B-PI-21', name: 'Shifa Mumtazah', className: 'VII B PUTRI', time: '10.00 - 11.00 WIB' },
+  { id: '7B-PI-22', name: 'Siti Alifia Zahra', className: 'VII B PUTRI', time: '10.00 - 11.00 WIB' },
+  { id: '7B-PI-23', name: 'Siti Zahwa Naura Auni', className: 'VII B PUTRI', time: '10.00 - 11.00 WIB' },
+  { id: '7B-PI-24', name: 'Siti Ziarra Nur Al-jaelani', className: 'VII B PUTRI', time: '10.00 - 11.00 WIB' },
+  { id: '7B-PI-25', name: 'Syafa Savira', className: 'VII B PUTRI', time: '10.00 - 11.00 WIB', isHold: true },
+  { id: '7B-PI-26', name: 'Syakilah Putri Oktavia', className: 'VII B PUTRI', time: '10.00 - 11.00 WIB' },
+  { id: '7B-PI-27', name: 'Syakirah Rizqia Ramadani', className: 'VII B PUTRI', time: '10.00 - 11.00 WIB' },
+  { id: '7B-PI-28', name: 'Tiara Izzatunnisa', className: 'VII B PUTRI', time: '10.00 - 11.00 WIB' },
+  { id: '7B-PI-29', name: 'Tuhfatun Najwa', className: 'VII B PUTRI', time: '10.00 - 11.00 WIB' },
+  { id: '7B-PI-30', name: 'Vinca Fitranavira Putri', className: 'VII B PUTRI', time: '11.00 - 12.20 WIB', isHold: true },
+  { id: '7B-PI-31', name: 'Zhafira Nur Azzahra', className: 'VII B PUTRI', time: '11.00 - 12.20 WIB' },
+  { id: '7B-PI-32', name: 'Muthiah Lathifah Azzahra', className: 'VII B PUTRI', time: '11.00 - 12.20 WIB', isHold: true },
+  { id: '7B-PI-33', name: 'Avikah Rosafitri', className: 'VII B PUTRI', time: '11.00 - 12.20 WIB' }
+];
+
+export default function App() {
+  const [searchTerm, setSearchTerm] = useState('');
+  const [students, setStudents] = useState(studentData);
+  const [isAdmin, setIsAdmin] = useState(false);
+  
+  // State untuk modal login admin
+  const [showLoginModal, setShowLoginModal] = useState(false);
+  const [passwordInput, setPasswordInput] = useState('');
+  const [loginError, setLoginError] = useState('');
+
+  const handleAdminAccessClick = () => {
+    if (isAdmin) {
+      setIsAdmin(false); // Logout langsung jika sudah login
+    } else {
+      setShowLoginModal(true); // Tampilkan modal
+      setPasswordInput('');
+      setLoginError('');
+    }
+  };
+
+  const handleLoginSubmit = (e) => {
+    e.preventDefault();
+    if (passwordInput === "malika123") {
+      setIsAdmin(true);
+      setShowLoginModal(false);
+    } else {
+      setLoginError('Password salah!');
+    }
+  };
+
+  const toggleHoldStatus = (id) => {
+    setStudents(prev => prev.map(s => s.id === id ? { ...s, isHold: !s.isHold } : s));
+  };
+
+  // Konstanta untuk mengecek jika ketikan kurang dari 3 huruf
+  const trimmedSearch = searchTerm.trim().toLowerCase();
+  const isSearchTooShort = trimmedSearch.length > 0 && trimmedSearch.length < 3;
+
+  // Fungsi untuk memfilter siswa berdasarkan nama
+  const filteredStudents = useMemo(() => {
+    // Jangan lakukan pencarian jika kosong atau kurang dari 3 huruf
+    if (!trimmedSearch || isSearchTooShort) return [];
+    
+    // Pecah kata kunci pencarian menjadi array (misal: "muh rizki" jadi ["muh", "rizki"])
+    const searchWords = trimmedSearch.split(/\s+/);
+    
+    return students.filter(student => {
+      const fullName = student.name.toLowerCase();
+      // Pastikan SETIAP potongan kata yang diketik HARUS ada di dalam nama utuh siswa.
+      return searchWords.every(word => fullName.includes(word));
+    });
+  }, [trimmedSearch, students, isSearchTooShort]);
+
+  return (
+    <div className="min-h-screen bg-slate-50 flex flex-col font-sans">
+      
+      {/* Header Banner */}
+      <header className="bg-gradient-to-r from-blue-600 to-sky-400 shadow-md">
+        <div className="max-w-4xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
+          <div className="flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0 text-white">
+            
+            <div className="flex items-center space-x-4">
+              <div className="bg-white p-2 rounded-full shadow-lg">
+                <img 
+                  src="https://iili.io/FsLlXA7.png" 
+                  alt="Logo Malika Boarding School" 
+                  className="h-16 w-16 md:h-20 md:w-20 object-contain rounded-full"
+                />
+              </div>
+              <div>
+                <h1 className="text-2xl md:text-3xl font-bold tracking-tight">
+                  Jadwal Sesi Pengambilan Rapor
+                </h1>
+                <p className="text-blue-100 flex items-center mt-1 text-sm md:text-base">
+                  <School className="w-4 h-4 mr-1" />
+                  SMP Malika Boarding School
+                </p>
+              </div>
+            </div>
+
+            <div className="bg-blue-800/30 backdrop-blur-sm rounded-lg p-3 text-sm border border-blue-400/50 shadow-inner w-full md:w-auto">
+              <div className="flex items-center space-x-2 text-blue-50 mb-1">
+                <Calendar className="w-4 h-4 text-blue-200" />
+                <span className="font-semibold">Selasa, 16 Juni 2026</span>
+              </div>
+              <div className="flex items-center justify-between space-x-4 text-blue-50">
+                <div className="flex items-center space-x-2">
+                  <MapPin className="w-4 h-4 text-blue-200" />
+                  <span>Gedung SMP Malika</span>
+                </div>
+                {isAdmin && (
+                  <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-amber-500 text-white shadow-sm">
+                    <ShieldCheck className="w-3 h-3 mr-1" />
+                    Admin
+                  </span>
+                )}
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </header>
+
+      {/* Main Content Area */}
+      <main className="flex-1 max-w-4xl w-full mx-auto px-4 py-8 sm:px-6 lg:px-8">
+        
+        {isAdmin ? (
+          /* ================= ADMIN VIEW ================= */
+          <div className="relative z-10 -mt-12">
+            <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8 mb-8 text-center">
+              <h2 className="text-xl font-bold text-slate-800 mb-2 flex items-center justify-center">
+                <ShieldCheck className="w-6 h-6 text-amber-500 mr-2" />
+                Daftar Tunggakan Siswa
+              </h2>
+              <p className="text-slate-500 text-sm">
+                Berikut adalah daftar siswa yang jadwal pengambilan rapornya ditangguhkan. <br className="hidden md:block" />
+                Klik "Tandai Lunas" jika siswa sudah menyelesaikan pembayaran.
+              </p>
+            </div>
+
+            <div className="max-w-2xl mx-auto space-y-4">
+              {students.filter(s => s.isHold).length > 0 ? (
+                students.filter(s => s.isHold).map(student => (
+                  <div key={student.id} className="bg-white border-l-4 border-red-500 rounded-xl p-5 shadow-sm flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 hover:shadow-md transition-shadow">
+                    <div className="flex items-center gap-4 w-full">
+                      <div className="bg-red-50 p-3 rounded-full flex-shrink-0">
+                        <AlertCircle className="h-6 w-6 text-red-500" />
+                      </div>
+                      <div className="flex flex-col text-left">
+                        <span className="text-lg text-slate-800 font-bold">{student.name}</span>
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-700 w-fit mt-1">
+                          Kelas: {student.className}
+                        </span>
+                      </div>
+                    </div>
+                    <button 
+                      onClick={() => toggleHoldStatus(student.id)}
+                      className="mt-2 sm:mt-0 bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2.5 rounded-lg text-sm font-semibold transition-colors flex-shrink-0 whitespace-nowrap shadow-sm w-full sm:w-auto"
+                    >
+                      Tandai Lunas
+                    </button>
+                  </div>
+                ))
+              ) : (
+                <div className="text-center py-12 px-4 bg-white rounded-2xl border border-slate-100 shadow-sm">
+                  <div className="bg-emerald-50 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <ShieldCheck className="h-10 w-10 text-emerald-500" />
+                  </div>
+                  <h3 className="text-lg font-bold text-slate-900 mb-1">Semua Siswa Telah Lunas</h3>
+                  <p className="text-slate-500">Tidak ada lagi tunggakan pembayaran. Semua jadwal siswa telah terbuka.</p>
+                </div>
+              )}
+            </div>
+          </div>
+        ) : (
+          /* ================= USER VIEW (SEARCH) ================= */
+          <>
+            {/* Search Card */}
+            <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8 mb-8 relative z-10 -mt-12">
+              <div className="mb-6 text-center">
+                <h2 className="text-xl font-semibold text-slate-800 mb-2">Cari Jadwal Siswa</h2>
+                <p className="text-slate-500 text-sm">
+                  Masukkan nama lengkap atau panggilan siswa untuk melihat sesi jam pengambilan rapor.
+                </p>
+              </div>
+
+              <div className="relative max-w-2xl mx-auto">
+                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                  <Search className="h-5 w-5 text-slate-400" />
+                </div>
+                <input
+                  type="text"
+                  className="block w-full pl-11 pr-4 py-4 border-2 border-slate-200 rounded-xl leading-5 bg-slate-50 placeholder-slate-400 focus:outline-none focus:bg-white focus:ring-0 focus:border-emerald-500 transition-colors duration-200 text-lg shadow-inner"
+                  placeholder="Ketik minimal 3 huruf awalan nama..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+                {searchTerm && (
+                  <button 
+                    onClick={() => setSearchTerm('')}
+                    className="absolute inset-y-0 right-0 pr-4 flex items-center text-slate-400 hover:text-slate-600"
+                  >
+                    <span className="text-sm font-medium bg-slate-200 px-2 py-1 rounded-md">Clear</span>
+                  </button>
+                )}
+              </div>
+            </div>
+
+            {/* Results Area */}
+            <div className="max-w-2xl mx-auto">
+              {searchTerm.trim() === '' ? (
+                <div className="text-center py-12 px-4">
+                  <div className="bg-emerald-50 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <User className="h-10 w-10 text-emerald-400" />
+                  </div>
+                  <h3 className="text-lg font-medium text-slate-900 mb-1">Sistem Siap Digunakan</h3>
+                  <p className="text-slate-500">Mulai ketikkan nama pada kolom pencarian di atas.</p>
+                </div>
+              ) : isSearchTooShort ? (
+                <div className="text-center py-12 px-4 bg-white rounded-2xl border border-slate-100 shadow-sm">
+                  <div className="bg-blue-50 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Search className="h-8 w-8 text-blue-400" />
+                  </div>
+                  <h3 className="text-lg font-bold text-slate-900 mb-1">Ketik Lebih Spesifik</h3>
+                  <p className="text-slate-500">
+                    Mohon ketik <strong>minimal 3 huruf</strong> agar pencarian lebih akurat dan tepat sasaran.
+                  </p>
+                </div>
+              ) : filteredStudents.length > 0 ? (
+                <div className="space-y-4">
+                  <p className="text-sm text-slate-500 font-medium mb-4 px-1">
+                    Ditemukan {filteredStudents.length} siswa dengan kata kunci "{searchTerm}"
+                  </p>
+                  
+                  {filteredStudents.map((student) => (
+                    student.isHold ? (
+                      <div key={student.id} className="bg-red-50 border border-red-200 rounded-xl p-5 flex flex-col sm:flex-row items-center sm:items-start gap-4 shadow-sm w-full">
+                        <AlertCircle className="h-8 w-8 text-red-600 flex-shrink-0" />
+                        <div className="flex flex-col text-center sm:text-left w-full mt-1 sm:mt-0">
+                          <span className="text-base sm:text-lg text-red-800 font-bold">Informasi Sesi Ditangguhkan</span>
+                          <span className="text-sm text-red-700 font-medium mt-1">
+                            Mohon maaf, jadwal pengambilan rapor tidak dapat ditampilkan. Harap selesaikan kewajiban pembayaran.
+                          </span>
+                        </div>
+                      </div>
+                    ) : (
+                      <div 
+                        key={student.id} 
+                        className="bg-white rounded-xl shadow-sm border-l-4 border-emerald-500 overflow-hidden hover:shadow-md transition-shadow duration-200 p-5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 group"
+                      >
+                        <div className="flex items-start space-x-4">
+                          <div className="p-3 rounded-full transition-colors bg-slate-100 group-hover:bg-emerald-50">
+                            <User className="h-6 w-6 text-slate-500 group-hover:text-emerald-600" />
+                          </div>
+                          <div>
+                            <h3 className="text-lg font-bold text-slate-800 leading-tight mb-1">
+                              {student.name}
+                            </h3>
+                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-700">
+                              Kelas: {student.className}
+                            </span>
+                          </div>
+                        </div>
+                        
+                        <div className="bg-emerald-50 border border-emerald-100 rounded-lg px-4 py-3 flex items-center w-full sm:w-auto mt-2 sm:mt-0 shadow-sm">
+                          <Clock className="h-5 w-5 text-emerald-600 mr-2 flex-shrink-0" />
+                          <div className="flex flex-col text-left">
+                            <span className="text-xs text-emerald-700 font-semibold uppercase tracking-wider">Sesi Pengambilan</span>
+                            <span className="text-emerald-900 font-bold whitespace-nowrap">{student.time}</span>
+                          </div>
+                        </div>
+                      </div>
+                    )
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-12 px-4 bg-white rounded-2xl border border-slate-100 shadow-sm">
+                  <div className="bg-red-50 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Search className="h-8 w-8 text-red-400" />
+                  </div>
+                  <h3 className="text-lg font-medium text-slate-900 mb-1">Siswa Tidak Ditemukan</h3>
+                  <p className="text-slate-500">
+                    Pastikan ejaan nama sudah benar atau coba gunakan nama panggilan.
+                  </p>
+                </div>
+              )}
+            </div>
+          </>
+        )}
+      </main>
+
+      {/* Footer */}
+      <footer className="bg-white border-t border-slate-200 mt-auto">
+        <div className="max-w-4xl mx-auto px-4 py-6 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between text-sm text-slate-500">
+          <p className="text-center sm:text-left">© 2026 SMP Malika Boarding School. Harap datang tepat waktu sesuai jadwal.</p>
+          <button 
+            onClick={handleAdminAccessClick}
+            className={`mt-4 sm:mt-0 flex items-center p-2 transition-colors rounded-full ${isAdmin ? 'text-blue-600 bg-blue-50' : 'text-slate-300 hover:text-blue-600 hover:bg-slate-100'}`}
+            title={isAdmin ? "Tutup Akses Admin" : "Akses Admin"}
+          >
+            <Shield className="w-5 h-5" />
+          </button>
+        </div>
+      </footer>
+
+      {/* Modal Login Admin */}
+      {showLoginModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm">
+          <div className="bg-white rounded-2xl shadow-xl w-full max-w-sm overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+            <div className="px-6 py-4 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+              <h3 className="text-lg font-bold text-slate-800 flex items-center">
+                <Shield className="w-5 h-5 text-blue-600 mr-2" />
+                Masuk Mode Admin
+              </h3>
+              <button 
+                onClick={() => setShowLoginModal(false)}
+                className="text-slate-400 hover:text-slate-600 transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            <form onSubmit={handleLoginSubmit} className="p-6">
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-slate-700 mb-2">Password Akses</label>
+                <input
+                  type="password"
+                  className={`w-full px-4 py-3 border ${loginError ? 'border-red-300 focus:ring-red-500' : 'border-slate-300 focus:ring-blue-500'} rounded-xl focus:outline-none focus:ring-2 focus:border-transparent transition-all`}
+                  placeholder="Masukkan password..."
+                  value={passwordInput}
+                  onChange={(e) => {
+                    setPasswordInput(e.target.value);
+                    setLoginError('');
+                  }}
+                  autoFocus
+                />
+                {loginError && <p className="text-red-500 text-sm mt-2">{loginError}</p>}
+              </div>
+              <div className="flex justify-end gap-3 mt-6">
+                <button
+                  type="button"
+                  onClick={() => setShowLoginModal(false)}
+                  className="px-4 py-2 text-slate-600 font-medium hover:bg-slate-100 rounded-lg transition-colors"
+                >
+                  Batal
+                </button>
+                <button
+                  type="submit"
+                  className="px-4 py-2 bg-blue-600 text-white font-medium hover:bg-blue-700 rounded-lg transition-colors shadow-sm"
+                >
+                  Masuk
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
