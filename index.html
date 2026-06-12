@@ -327,7 +327,7 @@
                         <div className="mb-6 text-center">
                             <h2 className="text-xl font-semibold text-slate-800 mb-2">Cari Jadwal Siswa</h2>
                             <p className="text-slate-500 text-sm">
-                            Masukkan nama lengkap atau panggilan siswa untuk melihat sesi jam pengambilan rapor.
+                            Masukkan nama lengkap atau panggilan dan Harap datang pada rentang waktu tersebut sesuai jadwal.
                             </p>
                         </div>
 
@@ -359,7 +359,7 @@
                             <div className="bg-emerald-50 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
                                 <UserIcon className="h-10 w-10 text-emerald-400" />
                             </div>
-                            <h3 className="text-lg font-medium text-slate-900 mb-1">MBS</h3>
+                            <h3 className="text-lg font-medium text-slate-900 mb-1"></h3>
                             <p className="text-slate-500">Mulai ketikkan nama pada kolom pencarian di atas.</p>
                             </div>
                         ) : isSearchTooShort ? (
@@ -438,7 +438,7 @@
                 {/* Footer */}
                 <footer className="bg-white border-t border-slate-200 mt-auto">
                     <div className="max-w-4xl mx-auto px-4 py-6 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between text-sm text-slate-500">
-                    <p className="text-center sm:text-left">© 2026 SMP Malika Boarding School. Harap datang pada rentang waktu tersebut sesuai jadwal.</p>
+                    <p className="text-center sm:text-left">© 2026 SMP Malika Boarding School.</p>
                     <button 
                         onClick={handleAdminAccessClick}
                         className={`mt-4 sm:mt-0 flex items-center p-2 transition-colors rounded-full ${isAdmin ? 'text-blue-600 bg-blue-50' : 'text-slate-300 hover:text-blue-600 hover:bg-slate-100'}`}
